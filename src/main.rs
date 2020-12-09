@@ -10,6 +10,13 @@ async fn main() -> Result<()> {
         return Ok(())
     }
 
-    println!("{:?}",opt.get_ports());
+    let ports = opt.get_ports().await?;
+    if ports.len() == 0 {
+        println!("Parameter Error");
+        return Ok(())
+    }
+
+    let mut core = Core::new(&opt).await;
+    core.run().await?;
     Ok(())
 }

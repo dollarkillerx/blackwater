@@ -1,6 +1,12 @@
 mod params;
+mod service;
+mod async_utils;
 
 pub use params::Params;
+
+pub use async_utils::*;
+
+pub use service::Core;
 
 pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
@@ -27,18 +33,18 @@ mod tests {
         let p_i = *&p1[..idx1].parse::<i32>().unwrap();
         let p_e = *&p1[idx1 + 1..].parse::<i32>().unwrap();
         for i in p_i..=p_e {
-            println!("{}",i);
+            println!("{}", i);
         }
     }
 
     #[test]
     fn str_p1() {
         let p1 = "80,443,50,65,56 ,565".to_string();
-        let b:Vec<&str> = p1.split(",").collect();
-        for i in &b{
+        let b: Vec<&str> = p1.split(",").collect();
+        for i in &b {
             // *i = "sadsad";
-            println!("{}",i)
+            println!("{}", i)
         }
-        println!("{:?}",b);
+        println!("{:?}", b);
     }
 }

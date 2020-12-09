@@ -27,7 +27,7 @@ pub struct Params {
 }
 
 impl Params {
-    pub fn get_ports(&self) -> Result<Vec<String>> {
+    pub async fn get_ports(&self) -> Result<Vec<String>> {
         let idx1 = match self.port.find("-") {
             Some(idx) => idx,
             None=> 0,
