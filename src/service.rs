@@ -1,6 +1,6 @@
 use super::*;
 use async_std::channel;
-use async_std::sync::{Arc, Mutex};
+use async_std::sync::Arc;
 use async_std::task;
 
 pub struct Core<'a> {
@@ -21,22 +21,23 @@ impl<'a> Core<'a> {
         // Concurrency Control
         let (sen_limit, rec_limit) = channel::bounded(self.param.concurrency as usize);
         let wg = Arc::new(WaitGroup::new().await);
+        let ip = self.param.ip.as_ref().unwrap();
 
-        for i in ports {
+        for port in ports {
             sen_limit.send(1).await;
             wg.add().await;
 
-
-
             let wg = wg.clone();
             let rec_limit = rec_limit.clone();
+            let ip = ip.clone();
             task::spawn(async move {
+                println!("{}:{}",ip,port);
                 wg.done().await;
                 rec_limit.recv().await;
             });
         }
 
-        wg.wait();
+        wg.wait().await;
 
         Ok(())
     }

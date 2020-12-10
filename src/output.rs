@@ -17,7 +17,7 @@ impl Output {
     }
 
     pub async fn run(&self) {
-        let mut output: Option<File>;
+        let output: Option<File>;
         match &self.outfile {
             None => {
                 output = None
@@ -40,7 +40,7 @@ impl Output {
                         }
                     }
                 }
-                Err(e) => {
+                Err(_) => {
                     break 'a;
                 }
             }

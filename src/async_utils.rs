@@ -15,12 +15,12 @@ impl WaitGroup {
     }
 
     pub async fn add(&self) {
-        let mut task = self.task.lock().await;
+        let task = self.task.lock().await;
         task.set(task.get() + 1);
     }
 
     pub async fn done(&self) {
-        let mut task = self.task.lock().await;
+        let task = self.task.lock().await;
         task.set(task.get() - 1);
     }
 
@@ -31,7 +31,7 @@ impl WaitGroup {
                 break
             }
 
-            task::sleep(std::time::Duration::from_millis(200)).await;
+            task::sleep(std::time::Duration::from_millis(100)).await;
         }
     }
 }
