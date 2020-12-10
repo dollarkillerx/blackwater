@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use super::*;
 
 #[derive(StructOpt, Debug)]
-#[structopt(name = "blackwater", about = "Asynchronous Port Scanner written in rust")]
+#[structopt(name = "blackwater", about = "Asynchronous Port Scanner written in rust  https://github.com/dollarkillerx/blackwater")]
 pub struct Params {
     // Scanned IP address
     #[structopt(short = "i", long = "ip")]
