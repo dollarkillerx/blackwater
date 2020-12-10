@@ -10,7 +10,7 @@ async fn main() -> Result<()> {
         return Ok(())
     }
 
-    println!("{:#?}",opt);
+    // println!("{:#?}",opt);
 
     let ports = opt.get_ports().await?;
     if ports.len() == 0 {
