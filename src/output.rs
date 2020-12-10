@@ -1,14 +1,15 @@
 use async_std::channel::Receiver;
 use async_std::fs::File;
 use async_std::prelude::*;
+use std::path::PathBuf;
 
-struct Output {
+pub struct Output {
     rec: Receiver<String>,
-    outfile: Option<String>,
+    outfile: Option<PathBuf>,
 }
 
 impl Output {
-    pub async fn new(rec: Receiver<String>, outfile: Option<String>) -> Output {
+    pub async fn new(rec: Receiver<String>, outfile: Option<PathBuf>) -> Output {
         Output {
             rec,
             outfile,
@@ -35,7 +36,7 @@ impl Output {
                             println!("{}", r);
                         }
                         Some(..) => {
-                            (&output).as_ref().unwrap().write(r.as_bytes()).await;
+                            output.as_ref().unwrap().write(r.as_bytes()).await.unwrap();
                         }
                     }
                 }

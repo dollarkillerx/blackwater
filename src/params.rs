@@ -18,8 +18,8 @@ pub struct Params {
     pub port: String,
 
     // Result output file address
-    #[structopt(short = "f", long = "outfile", default_value = "outfile.txt", parse(from_os_str))]
-    pub outfile: PathBuf,
+    #[structopt(short = "f", long = "outfile", parse(from_os_str))]
+    pub outfile: Option<PathBuf>,
 
     // Scanning with UDP
     #[structopt(short = "u", long = "udp")]

@@ -1,7 +1,7 @@
 use async_std::sync::{Mutex};
 use async_std::task;
 
-struct WaitGroup {
+pub struct WaitGroup {
     // Remaining Tasks
     task: Mutex<u64>
 }
