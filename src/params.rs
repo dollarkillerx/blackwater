@@ -10,7 +10,7 @@ pub struct Params {
     pub ip: Option<String>,
 
     // Number of concurrent scans
-    #[structopt(short = "c", long = "concurrency", default_value = "20000")]
+    #[structopt(short = "c", long = "concurrency", default_value = "80000")]
     pub concurrency: u32,
 
     // Port Range <port,port,port> or <port-port>
