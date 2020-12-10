@@ -1,32 +1,33 @@
 use async_std::sync::{Mutex};
 use async_std::task;
+use std::cell::Cell;
 
 pub struct WaitGroup {
     // Remaining Tasks
-    task: Mutex<u64>
+    task: Mutex<Cell<u64>>
 }
 
 impl WaitGroup {
     pub async fn new() -> WaitGroup {
         WaitGroup{
-            task: Mutex::new(0),
+            task: Mutex::new(Cell::new(0)),
         }
     }
 
-    pub async fn add(&mut self) {
+    pub async fn add(&self) {
         let mut task = self.task.lock().await;
-        *task = *task + 1;
+        task.set(task.get() + 1);
     }
 
-    pub async fn done(&mut self) {
+    pub async fn done(&self) {
         let mut task = self.task.lock().await;
-        *task = *task - 1;
+        task.set(task.get() - 1);
     }
 
-    pub async fn wait(&mut self) {
+    pub async fn wait(&self) {
         loop {
             let tk = self.task.lock().await;
-            if *tk == 0 {
+            if tk.get() == 0 {
                 break
             }
 

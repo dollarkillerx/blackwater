@@ -20,28 +20,23 @@ impl<'a> Core<'a> {
 
         // Concurrency Control
         let (sen_limit, rec_limit) = channel::bounded(self.param.concurrency as usize);
-        let mut wg = Arc::new(WaitGroup::new().await);
+        let wg = Arc::new(WaitGroup::new().await);
 
         for i in ports {
             sen_limit.send(1).await;
-            unsafe {
-                wg.add().await;
-            }
+            wg.add().await;
 
 
-            let mut wg = wg.clone();
+
+            let wg = wg.clone();
             let rec_limit = rec_limit.clone();
             task::spawn(async move {
-                unsafe {
-                    wg.done().await;
-                }
+                wg.done().await;
                 rec_limit.recv().await;
             });
         }
 
-        unsafe {
-            wg.wait();
-        }
+        wg.wait();
 
         Ok(())
     }
