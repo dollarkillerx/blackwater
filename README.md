@@ -3,7 +3,7 @@ Blaskwate rust port scanner tool
 
 Scan all ports in one second, basically no missing
 ### Install
-`sudo curl -L "https://github.com/dollarkillerx/blackwater/releases/download/v0.0.1/blackwater_linux" -o /usr/local/bin/blackwater`
+`sudo curl -L "https://github.com/dollarkillerx/blackwater/releases/download/v0.0.2/blackwater_linux" -o /usr/local/bin/blackwater`
 `sudo chmod +x /usr/local/bin/blackwater`
 
 ### Usage
@@ -17,14 +17,14 @@ USAGE:
 
 FLAGS:
     -h, --help       Prints help information
-    -u, --udp        
+    -u, --udp        Scanning with UDP
     -V, --version    Prints version information
 
 OPTIONS:
-    -c, --concurrency <concurrency>     [default: 80000]
-    -i, --ip <ip>                      
-    -f, --outfile <outfile>            
-    -p, --port <port>                   [default:
+    -c, --concurrency <concurrency>    Number of concurrent scans [default: 65535]
+    -i, --ip <ip>                      Scanned IP address
+    -f, --outfile <outfile>            Result output file address
+    -p, --port <port>                  Port Range <port,port,port> or <port-port> [default:
                                        21,22,23,25,69,79,80,88,110,113,119,220,443,1433,1521,2082,2083,2086,2087,2095,2096,2077,2078,3306,3389,5432,6379,8080,9000,9001,9200,9300,11211,27017]
 ```
 
