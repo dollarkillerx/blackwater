@@ -1,7 +1,9 @@
 use async_std::channel::Receiver;
-use async_std::fs::File;
-use async_std::prelude::*;
+// use async_std::fs::File;
+// use async_std::prelude::*;
 use std::path::PathBuf;
+use std::fs::File;
+use std::io::Write;
 
 pub struct Output {
     rec: Receiver<String>,
@@ -23,7 +25,8 @@ impl Output {
                 output = None
             }
             Some(file) => {
-                output = Some(File::create(file).await.unwrap());
+                // output = Some(File::create(file).await.unwrap());
+                output = Some(File::create(file).unwrap());
             }
         };
 
@@ -36,7 +39,10 @@ impl Output {
                             println!("{}", r);
                         }
                         Some(..) => {
-                            output.as_ref().unwrap().write(r.as_bytes()).await.unwrap();
+                            println!("{}", r);
+                            let r = format!("{} \n", r);
+                            // output.as_ref().unwrap().write(r.as_bytes()).await.unwrap();
+                            output.as_ref().unwrap().write(r.as_bytes()).unwrap();
                         }
                     }
                 }

@@ -9,3 +9,9 @@ edition = "2018"
 [dependencies]
 async-std = { version = "1.8.0", features = ["unstable", "attributes"] }
 structopt = "0.3.21"
+
+[profile.release]
+opt-level = 3
+codegen-units = 1
+panic = 'abort'
+lto = true

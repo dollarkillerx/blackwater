@@ -97,3 +97,6 @@ Intel(R) Core(TM) i3-9100 CPU @ 3.60GHz
 HHD
 8G DDR4
 ```
+
+### build
+`make build`
