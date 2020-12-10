@@ -1,6 +1,7 @@
 # blackwater
 Blaskwate rust port scanner tool
 
+Scan all ports in one second, basically no missing
 ### Install
 ``
 
