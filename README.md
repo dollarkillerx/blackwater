@@ -8,6 +8,25 @@ Scan all ports in one second, basically no missing
 
 ### Usage
 `blackwater -h`
+``` 
+blackwater 0.1.0
+Asynchronous Port Scanner written in rust  https://github.com/dollarkillerx/blackwater
+
+USAGE:
+    blackwater [FLAGS] [OPTIONS]
+
+FLAGS:
+    -h, --help       Prints help information
+    -u, --udp        
+    -V, --version    Prints version information
+
+OPTIONS:
+    -c, --concurrency <concurrency>     [default: 80000]
+    -i, --ip <ip>                      
+    -f, --outfile <outfile>            
+    -p, --port <port>                   [default:
+                                       21,22,23,25,69,79,80,88,110,113,119,220,443,1433,1521,2082,2083,2086,2087,2095,2096,2077,2078,3306,3389,5432,6379,8080,9000,9001,9200,9300,11211,27017]
+```
 
 ### speed
 Amazing speed Not a single port is missed
