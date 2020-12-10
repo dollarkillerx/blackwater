@@ -3,7 +3,8 @@ Blaskwate rust port scanner tool
 
 Scan all ports in one second, basically no missing
 ### Install
-``
+`sudo curl -L "https://github.com/dollarkillerx/blackwater/releases/download/v0.0.1/blackwater_linux" -o /usr/local/bin/blackwater`
+`sudo chmod +x /usr/local/bin/blackwater`
 
 ### Usage
 `blackwater -h`
