@@ -9,7 +9,7 @@ pub struct WaitGroup {
 
 impl WaitGroup {
     pub async fn new() -> WaitGroup {
-        WaitGroup{
+        WaitGroup {
             task: Mutex::new(Cell::new(0)),
         }
     }
@@ -28,7 +28,7 @@ impl WaitGroup {
         loop {
             let tk = self.task.lock().await;
             if tk.get() == 0 {
-                break
+                break;
             }
 
             task::sleep(std::time::Duration::from_millis(100)).await;

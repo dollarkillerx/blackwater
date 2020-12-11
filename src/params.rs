@@ -21,6 +21,10 @@ pub struct Params {
     #[structopt(short = "f", long = "outfile", parse(from_os_str))]
     pub outfile: Option<PathBuf>,
 
+    /// Timeout  Milliseconds
+    #[structopt(short = "t", long = "timeout", default_value = "800")]
+    pub timeout: u64,
+
     /// Scanning with UDP
     #[structopt(short = "u", long = "udp")]
     pub udp: bool,
@@ -30,12 +34,12 @@ impl Params {
     pub async fn get_ports(&self) -> Result<Vec<String>> {
         let idx1 = match self.port.find("-") {
             Some(idx) => idx,
-            None=> 0,
+            None => 0,
         };
 
         let idx2 = match self.port.find(",") {
             Some(idx) => idx,
-            None=> 0,
+            None => 0,
         };
 
         if idx1 == 0 && idx2 == 0 {
@@ -55,13 +59,13 @@ impl Params {
             let start = *&self.port[..idx1].parse::<i32>().unwrap();
             let end = *&self.port[idx1 + 1..].parse::<i32>().unwrap();
             for i in start..=end {
-                lists.push(format!("{}",i));
+                lists.push(format!("{}", i));
             }
-            return Ok(lists)
+            return Ok(lists);
         }
 
         // param2
-        let sli:Vec<&str> = self.port.split(",").collect();
+        let sli: Vec<&str> = self.port.split(",").collect();
         for i in sli {
             lists.push(i.trim().to_string());
         }

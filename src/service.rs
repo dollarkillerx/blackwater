@@ -23,13 +23,17 @@ impl<'a> Core<'a> {
 
         // run output
         task::spawn(async move {
-           output.run().await;
+            output.run().await;
         });
 
         // Concurrency Control
         let (sen_limit, rec_limit) = channel::bounded(self.param.concurrency as usize);
         let wg = Arc::new(WaitGroup::new().await);
         let ip = self.param.ip.as_ref().unwrap();
+        let mut timeout = self.param.timeout;
+        if timeout == 0 {
+            timeout = 800
+        }
 
         for port in ports {
             sen_limit.send(1).await.unwrap();
@@ -40,7 +44,7 @@ impl<'a> Core<'a> {
             let sen_file = sen_file.clone();
             let ip = ip.clone();
             task::spawn(async move {
-                match Self::blasting(format!("{}:{}",ip,port)).await {
+                match Self::blasting(format!("{}:{}", ip, port), timeout).await {
                     Ok(data) => {
                         sen_file.send(data).await.unwrap();
                     }
@@ -56,8 +60,8 @@ impl<'a> Core<'a> {
         Ok(())
     }
 
-    async fn blasting(addr: String) ->Result<String> {
-        let conn: std::result::Result<async_std::net::TcpStream, std::io::Error> = TcpStream::connect(&addr).timeout(Duration::from_millis(800)).await?;
+    async fn blasting(addr: String, timeout: u64) -> Result<String> {
+        let conn: std::result::Result<async_std::net::TcpStream, std::io::Error> = TcpStream::connect(&addr).timeout(Duration::from_millis(timeout)).await?;
         match conn {
             Ok(_) => {
                 Ok(addr)
@@ -66,6 +70,5 @@ impl<'a> Core<'a> {
                 Err("conn error".into())
             }
         }
-
     }
 }

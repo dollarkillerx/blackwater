@@ -39,6 +39,7 @@ impl Output {
                             println!("{}", r);
                             let r = format!("{} \n", r);
                             output.as_ref().unwrap().write_all(r.as_bytes()).await.unwrap();
+                            output.as_ref().unwrap().flush().await.unwrap();
                         }
                     }
                 }
