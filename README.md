@@ -110,12 +110,6 @@ github.com:5060
 real    0m1.137s
 user    0m0.685s
 sys     0m0.756s
-
-
-Test Environment
-Intel(R) Core(TM) i3-9100 CPU @ 3.60GHz
-HHD
-8G DDR4
 ```
 
 ### build
