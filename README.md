@@ -126,3 +126,11 @@ HHD
 - [ ] File import batch scanning
 - [ ] Distributed
 - [ ] Fingerprint recognition
+
+## Parameter tuning to resolve network packet loss
+- Extranet scan, not missing a port
+    - Modify thread parameters `-c` Calculation formula: Number of current CPU logical cores * 100
+    - Example: Current CPU logical core is 4 cores Parameter is `blackwater -i github.com -c 400 -p 1-65535 `
+- Intranet scan, not missing a port
+    - Modify thread parameters `-c` Calculation formula: Number of current CPU logical cores * 250
+    - Example: Current CPU logical core is 4 cores Parameter is `blackwater -i 192.168.88.11 -c 1000 -p 1-65535 `
