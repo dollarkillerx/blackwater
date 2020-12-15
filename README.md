@@ -127,7 +127,10 @@ HHD
 - [ ] Distributed
 - [ ] Fingerprint recognition
 
-## Parameter tuning to resolve network packet loss
+## Parameter adjustment, solve the problem of packet loss
+There are many reasons for packet loss, roughly divided into two. 
+1. network problems (solution: 1. switch to a better network 2. modify the `-t` timeout time) 
+2. cpu processing super link performance is insufficient (solution: reduce the number of concurrent)
 - Extranet scan, not missing a port
     - Modify thread parameters `-c` Calculation formula: Number of current CPU logical cores * 100
     - Example: Current CPU logical core is 4 cores Parameter is `blackwater -i github.com -c 400 -p 1-65535 `
