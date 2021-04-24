@@ -1,23 +1,23 @@
-use async_std::channel::Receiver;
-use async_std::fs::File;
-use async_std::prelude::*;
+use tokio::fs::File;
 use std::path::PathBuf;
+use tokio::io::AsyncWriteExt;
+use tokio::sync::mpsc::UnboundedReceiver;
 
 pub struct Output {
-    rec: Receiver<String>,
+    rec: UnboundedReceiver<String>,
     outfile: Option<PathBuf>,
 }
 
 impl Output {
-    pub async fn new(rec: Receiver<String>, outfile: Option<PathBuf>) -> Output {
+    pub fn new(rec: UnboundedReceiver<String>, outfile: Option<PathBuf>) -> Output {
         Output {
             rec,
             outfile,
         }
     }
 
-    pub async fn run(&self) {
-        let output: Option<File>;
+    pub async fn run(&mut self) {
+        let mut output: Option<File>;
         match &self.outfile {
             None => {
                 output = None
@@ -30,20 +30,21 @@ impl Output {
         'a:
         loop {
             match self.rec.recv().await {
-                Ok(r) => {
-                    match &self.outfile {
+                Some(r) => {
+                    match output {
                         None => {
                             println!("{}", r);
                         }
-                        Some(..) => {
+                        Some(_) => {
                             println!("{}", r);
                             let r = format!("{} \n", r);
-                            output.as_ref().unwrap().write_all(r.as_bytes()).await.unwrap();
-                            output.as_ref().unwrap().flush().await.unwrap();
+                            output.as_mut().unwrap().write_all(r.as_bytes()).await.unwrap();
+                            output.as_mut().unwrap().flush().await.unwrap();
+
                         }
                     }
                 }
-                Err(_) => {
+                None => {
                     break 'a;
                 }
             }

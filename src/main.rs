@@ -1,7 +1,7 @@
 use blackwater::*;
 use structopt::StructOpt;
 
-#[async_std::main]
+#[tokio::main]
 async fn main() -> Result<()> {
     let opt: Params = Params::from_args();
     println!("{}", LOGO);

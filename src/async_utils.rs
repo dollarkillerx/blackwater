@@ -1,5 +1,5 @@
-use async_std::sync::{Mutex};
-use async_std::task;
+use tokio::sync::{Mutex};
+use tokio::time;
 use std::cell::Cell;
 
 pub struct WaitGroup {
@@ -31,7 +31,7 @@ impl WaitGroup {
                 break;
             }
 
-            task::sleep(std::time::Duration::from_millis(100)).await;
+            time::sleep(time::Duration::from_millis(100)).await;
         }
     }
 }

@@ -1,10 +1,9 @@
 use super::*;
-use async_std::channel;
-use async_std::sync::Arc;
-use async_std::task;
-use async_std::net::TcpStream;
-use async_std::prelude::*;
-use std::time::Duration;
+use std::sync::Arc;
+use tokio::net::{TcpStream};
+use tokio::sync::{mpsc, Mutex};
+// use tokio::prelude::*;
+use tokio::time;
 
 pub struct Core<'a> {
     param: &'a params::Params,
@@ -18,16 +17,18 @@ impl<'a> Core<'a> {
     }
 
     pub async fn run(&mut self, ports: Vec<String>) -> Result<()> {
-        let (sen_file, rec_file) = channel::unbounded();
-        let output = Arc::new(Output::new(rec_file, self.param.outfile.clone()).await);
+        let (sen_file, rec_file) = mpsc::unbounded_channel();
+        // let mut output = Arc::new(Output::new(rec_file, self.param.outfile.clone()));
+        let mut output = Output::new(rec_file, self.param.outfile.clone());
 
         // run output
-        task::spawn(async move {
+        tokio::spawn(async move {
             output.run().await;
         });
 
         // Concurrency Control
-        let (sen_limit, rec_limit) = channel::bounded(self.param.concurrency as usize);
+        let (sen_limit, rec_limit) = mpsc::channel(self.param.concurrency as usize);
+        let rec_limit = Arc::new(Mutex::new(rec_limit));
         let wg = Arc::new(WaitGroup::new().await);
         let ip = self.param.ip.as_ref().unwrap();
         let mut timeout = self.param.timeout;
@@ -43,15 +44,17 @@ impl<'a> Core<'a> {
             let rec_limit = rec_limit.clone();
             let sen_file = sen_file.clone();
             let ip = ip.clone();
-            task::spawn(async move {
+            tokio::spawn(async move {
                 match Self::blasting(format!("{}:{}", ip, port), timeout).await {
                     Ok(data) => {
-                        sen_file.send(data).await.unwrap();
+                        sen_file.send(data).unwrap();
+                        // sen_file.send(data).await.unwrap();
                     }
                     _ => {}
                 }
                 wg.done().await;
-                rec_limit.recv().await.unwrap();
+
+                rec_limit.lock().await.recv().await.unwrap();
             });
         }
 
@@ -61,10 +64,19 @@ impl<'a> Core<'a> {
     }
 
     async fn blasting(addr: String, timeout: u64) -> Result<String> {
-        let conn: std::result::Result<async_std::net::TcpStream, std::io::Error> = TcpStream::connect(&addr).timeout(Duration::from_millis(timeout)).await?;
+        // let conn: std::result::Result<async_std::net::TcpStream, std::io::Error> = TcpStream::connect(&addr).timeout(Duration::from_millis(timeout)).await?;
+        let conn = time::timeout(
+            time::Duration::from_millis(timeout),
+            TcpStream::connect(&addr),
+        ).await;
+
         match conn {
-            Ok(_) => {
-                Ok(addr)
+            Ok(r) => {
+                if let Ok(_) = r {
+                    return Ok(addr)
+                };
+
+                Err("conn error".into())
             }
             _ => {
                 Err("conn error".into())
