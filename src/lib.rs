@@ -57,16 +57,16 @@ mod tests {
     }
 
 
-    use async_std::task;
-    use async_std::net::TcpStream;
-
-    #[test]
-    fn tcp_connect() {
-        let t = async {
-            let t = TcpStream::connect("192.168.88.11:443").await;
-            println!("{:#?}", t);
-        };
-
-        task::block_on(t);
-    }
+    // use async_std::task;
+    // use async_std::net::TcpStream;
+    //
+    // #[test]
+    // fn tcp_connect() {
+    //     let t = async {
+    //         let t = TcpStream::connect("192.168.88.11:443").await;
+    //         println!("{:#?}", t);
+    //     };
+    //
+    //     task::block_on(t);
+    // }
 }

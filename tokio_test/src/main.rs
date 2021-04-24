@@ -88,3 +88,14 @@ async fn test_timeout() {
 
   println!("r: {:?}", ti);
 }
+
+async fn test_simple_channel( ) {
+    let (tx, mut rx) = mpsc::channel(32);
+
+    for _ in 0..2 {
+        let tx = tx.clone();
+        tokio::spawn(async move {
+            tx
+        });
+    }
+}
