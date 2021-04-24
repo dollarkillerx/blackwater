@@ -14,11 +14,14 @@ pub use service::Core;
 pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 
 pub const LOGO: &str = r"
- _      _
-| |    | |
-| |_   | |   __
-| | |  | |  |  |
-| _ |  |_|  |  |
+
+  ____   _               _                     _
+ |  _ \ | |             | |                   | |
+ | |_) || |  __ _   ___ | | ____      __ __ _ | |_  ___  _ __
+ |  _ < | | / _` | / __|| |/ /\ \ /\ / // _` || __|/ _ \| '__|
+ | |_) || || (_| || (__ |   <  \ V  V /| (_| || |_|  __/| |
+ |____/ |_| \__,_| \___||_|\_\  \_/\_/  \__,_| \__|\___||_|
+
 Black Water
 Asynchronous Port Scanner written in rust
 https://github.com/dollarkillerx/blackwater
