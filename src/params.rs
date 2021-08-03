@@ -1,5 +1,7 @@
-use structopt::StructOpt;
 use std::path::PathBuf;
+
+use structopt::StructOpt;
+
 use super::*;
 
 #[derive(StructOpt, Debug)]
@@ -13,8 +15,8 @@ pub struct Params {
     #[structopt(short = "c", long = "concurrency", default_value = "65535")]
     pub concurrency: u32,
 
-    /// Port Range <port,port,port> or <port-port>
-    #[structopt(short = "p", long = "port", default_value = "21,22,23,25,69,79,80,88,110,113,119,220,443,1433,1521,2082,2083,2086,2087,2095,2096,2077,2078,3306,3389,5432,6379,8080,9000,9001,9200,9300,11211,27017")]
+    /// Port Range <port,port,port> or <port-port> or <port,port,port-port>
+    #[structopt(short = "p", long = "port", default_value = "21,22,23,25,69,79,80-89,110,111,113,115,119,135,137,138,139,143,152,153,158,161,162,179,194,201,209,213,218,220,259,264,308,389,443,445,512,513,514,524,530,531,532,540,542,544,546,547,548,554,556,563,591,593,604,631,636,647,648,652,665,666,674,691,692,695,699,700,701,702,706,771,720,749,782,829,860,873,901,902,904,981,989,990,991,992,993,995,1025,1433,1521,2082,2083,2086,2087,2095,2096,2077,2078,2222,2601,2604,3128,3306,3311,3312,3389,5432,5560,5900,5984,6379,7001,7002,7778,8080-9090,9200,9300,9418,10000,11211,27017,27018,50000,50030,50070")]
     pub port: String,
 
     /// Result output file address
@@ -53,6 +55,24 @@ impl Params {
             };
         }
         let mut lists = Vec::new();
+
+        // 处理情况: 80,84,86-89,59
+        if idx1 != 0 && idx2 != 0 {
+            let sli: Vec<&str> = self.port.split(",").collect();
+            for i in sli {
+                if let Some(t) = i.find("-") {
+                    let start = i[..t].parse::<i32>().unwrap();
+                    let end = i[t + 1..].parse::<i32>().unwrap();
+                    for ic in start..=end {
+                        lists.push(format!("{}", ic));
+                    }
+                } else {
+                    lists.push(i.trim().to_string());
+                }
+            }
+
+            return Ok(lists);
+        }
 
         // param1
         if idx1 != 0 {
