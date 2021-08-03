@@ -25,7 +25,7 @@ pub const LOGO: &str = r"
  ░          ░  ░      ░  ░░ ░      ░  ░       ░          ░  ░            ░  ░   ░
       ░                   ░
 
-Black Water
+Black Water v1.0.1
 Asynchronous Port Scanner written in rust
 https://github.com/dollarkillerx/blackwater
 ";
